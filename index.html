@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="color-scheme" content="dark"/>
+  <title>NIKE — Art of Speed</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Raleway:wght@100;200;300;400;500&family=Raleway+Dots&display=swap" rel="stylesheet"/>
+
+  <style>
+    :root {
+      --bg:      #080808;
+      --deep:    #050505;
+      --panel:   #0e0e0e;
+      --blue:    #1a3a5c;
+      --blue-lt: #2a5a8c;
+      --steel:   #8a9aaa;
+      --silver:  #c4ccd4;
+      --chrome:  #e8eaec;
+      --white:   #f4f5f6;
+      --gold:    #a08040;
+      --border:  rgba(196,204,212,.08);
+      --border2: rgba(196,204,212,.15);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
+    body {
+      background: var(--bg);
+      color: var(--chrome);
+      font-family: 'Raleway', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+    * { cursor: none; }
+
+    /* ── CURSOR ── */
+    #cur { position: fixed; width: 6px; height: 6px; background: var(--chrome); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: width .2s, height .2s; }
+    #cur-ring { position: fixed; width: 42px; height: 42px; border: 1px solid rgba(196,204,212,.35); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: all .2s ease; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 36px 72px;
+      background: linear-gradient(to bottom, rgba(5,5,5,.97) 0%, transparent 100%);
+    }
+    .nav-brand {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 100;
+      font-size: 1.05rem;
+      letter-spacing: .55em;
+      text-transform: uppercase;
+      color: var(--chrome);
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 48px; list-style: none; }
+    .nav-links a {
+      font-size: .62rem; font-weight: 300; letter-spacing: .32em;
+      text-transform: uppercase; color: var(--steel);
+      text-decoration: none; transition: color .4s;
+    }
+    .nav-links a:hover { color: var(--chrome); }
+    .nav-right { display: flex; align-items: center; gap: 32px; }
+    .nav-btn {
+      font-size: .6rem; font-weight: 400; letter-spacing: .28em;
+      text-transform: uppercase; color: var(--bg);
+      background: var(--chrome); padding: 12px 32px;
+      text-decoration: none; transition: background .3s, letter-spacing .3s;
+    }
+    .nav-btn:hover { background: var(--silver); letter-spacing: .34em; }
+
+    /* ── SNAP SECTIONS ── */
+    .snap { scroll-snap-align: start; }
+
+    /* ── HERO ── */
+    #hero {
+      height: 100vh; position: relative;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: flex-start;
+      padding: 0 72px; overflow: hidden;
+    }
+    .hero-grid-bg {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(180deg, rgba(5,5,5,.6) 0%, transparent 40%, transparent 60%, rgba(5,5,5,.9) 100%),
+        repeating-linear-gradient(90deg, transparent, transparent 120px, rgba(255,255,255,.018) 120px, rgba(255,255,255,.018) 121px),
+        repeating-linear-gradient(0deg, transparent, transparent 120px, rgba(255,255,255,.018) 120px, rgba(255,255,255,.018) 121px),
+        radial-gradient(ellipse 80% 60% at 70% 50%, #0d1f33 0%, #080808 65%);
+    }
+    .hero-giant {
+      position: absolute; bottom: -4vh; right: -2vw;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(22rem, 38vw, 52rem);
+      font-weight: 700; font-style: italic;
+      color: rgba(255,255,255,.022);
+      line-height: 1; pointer-events: none; user-select: none;
+      letter-spacing: -.04em;
+    }
+    .hero-line {
+      width: 1px; height: 80px;
+      background: linear-gradient(to bottom, transparent, var(--steel));
+      margin-bottom: 40px;
+      opacity: 0; animation: fadeUp .8s .2s forwards;
+    }
+    .hero-eyebrow {
+      font-size: .6rem; font-weight: 300; letter-spacing: .45em;
+      text-transform: uppercase; color: var(--steel);
+      margin-bottom: 28px;
+      opacity: 0; animation: fadeUp .8s .4s forwards;
+    }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.8rem, 8.5vw, 8rem);
+      font-weight: 300; line-height: 1.0;
+      color: var(--white); max-width: 780px;
+      opacity: 0; animation: fadeUp 1s .6s forwards;
+    }
+    .hero-title em { font-style: italic; color: var(--silver); }
+    .hero-desc {
+      font-size: .82rem; font-weight: 300; letter-spacing: .1em;
+      color: var(--steel); max-width: 380px;
+      margin-top: 32px; line-height: 1.9;
+      opacity: 0; animation: fadeUp .9s .85s forwards;
+    }
+    .hero-ctas {
+      display: flex; align-items: center; gap: 40px;
+      margin-top: 52px;
+      opacity: 0; animation: fadeUp .9s 1.1s forwards;
+    }
+    .cta-main {
+      font-size: .65rem; font-weight: 400; letter-spacing: .32em;
+      text-transform: uppercase; color: var(--bg);
+      background: var(--chrome); padding: 18px 56px;
+      text-decoration: none; transition: all .3s;
+    }
+    .cta-main:hover { background: var(--silver); }
+    .cta-sec {
+      font-size: .62rem; font-weight: 300; letter-spacing: .28em;
+      text-transform: uppercase; color: var(--steel);
+      text-decoration: none; display: flex; align-items: center; gap: 14px;
+      transition: color .3s;
+    }
+    .cta-sec::after { content: ''; width: 40px; height: 1px; background: currentColor; }
+    .cta-sec:hover { color: var(--chrome); }
+
+    /* scroll indicator */
+    .scroll-hint {
+      position: absolute; bottom: 48px; left: 72px;
+      display: flex; align-items: center; gap: 16px;
+      font-size: .58rem; letter-spacing: .3em; text-transform: uppercase;
+      color: rgba(138,154,170,.5);
+      opacity: 0; animation: fadeUp .8s 1.6s forwards;
+    }
+    .scroll-hint::before { content: ''; width: 1px; height: 36px; background: rgba(138,154,170,.3); }
+
+    /* ── DIVIDER BAND ── */
+    .band {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0; overflow: hidden; white-space: nowrap;
+    }
+    .band-inner { display: inline-flex; animation: ticker 28s linear infinite; }
+    .band-item {
+      font-size: .6rem; font-weight: 200; letter-spacing: .4em;
+      text-transform: uppercase; color: rgba(138,154,170,.4);
+      padding: 0 56px;
+    }
+    .band-item b { color: rgba(196,204,212,.6); font-weight: 300; }
+    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ── FULL SECTIONS ── */
+    .full-section {
+      height: 100vh; position: relative;
+      display: flex; align-items: center;
+      overflow: hidden;
+    }
+
+    /* ── MODELO SECTION ── */
+    .modelo-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(105deg, var(--deep) 0%, #0a1520 100%);
+    }
+    .modelo-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 55% 70% at 75% 50%, rgba(26,58,92,.35) 0%, transparent 70%);
+    }
+    .modelo-content {
+      position: relative; z-index: 2;
+      padding: 0 72px; width: 100%;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+    }
+    .modelo-label {
+      font-size: .58rem; letter-spacing: .45em; text-transform: uppercase;
+      color: var(--steel); margin-bottom: 24px;
+    }
+    .modelo-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      font-weight: 300; line-height: 1.05; color: var(--white);
+    }
+    .modelo-name em { font-style: italic; display: block; color: var(--silver); }
+    .modelo-sub {
+      font-size: .78rem; color: var(--steel); line-height: 1.9;
+      margin-top: 28px; max-width: 420px;
+    }
+    .modelo-action { margin-top: 44px; }
+
+    /* spec strip */
+    .spec-strip {
+      display: flex; flex-direction: column; gap: 0;
+      border-left: 1px solid var(--border2);
+      padding-left: 48px;
+    }
+    .spec-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 20px 0; border-bottom: 1px solid var(--border);
+    }
+    .spec-key {
+      font-size: .6rem; letter-spacing: .28em;
+      text-transform: uppercase; color: var(--steel);
+    }
+    .spec-val {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; font-weight: 300; color: var(--chrome);
+    }
+    .spec-val sup {
+      font-family: 'Raleway', sans-serif;
+      font-size: .65rem; letter-spacing: .15em; color: var(--steel);
+      margin-left: 4px; vertical-align: super;
+    }
+
+    /* ── COLECCIÓN GRID ── */
+    #coleccion {
+      height: auto; min-height: 100vh;
+      padding: 120px 72px; scroll-snap-align: start;
+    }
+    .col-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 64px;
+    }
+    .col-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+    .col-card {
+      position: relative; overflow: hidden;
+      background: var(--panel);
+    }
+    .col-visual {
+      height: 400px; position: relative; overflow: hidden;
+      background: linear-gradient(145deg, #101418 0%, #080a0d 100%);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform .7s ease;
+    }
+    .col-card:hover .col-visual { transform: scale(1.04); }
+    .col-glyph {
+      font-family: 'Playfair Display', serif;
+      font-size: 9rem; font-style: italic; font-weight: 700;
+      color: rgba(255,255,255,.04); line-height: 1;
+      transition: color .5s;
+    }
+    .col-card:hover .col-glyph { color: rgba(42,90,140,.12); }
+    .col-badge {
+      position: absolute; top: 24px; left: 24px;
+      font-size: .55rem; letter-spacing: .28em;
+      text-transform: uppercase; color: var(--chrome);
+      border: 1px solid var(--border2); padding: 6px 14px;
+      background: rgba(8,8,8,.7);
+    }
+    .col-info { padding: 32px 36px 36px; border-top: 1px solid var(--border); }
+    .col-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; font-weight: 300; color: var(--white);
+      margin-bottom: 6px;
+    }
+    .col-cat {
+      font-size: .6rem; letter-spacing: .25em; text-transform: uppercase;
+      color: var(--steel); margin-bottom: 20px;
+    }
+    .col-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; font-weight: 300; color: var(--silver);
+    }
+
+    /* ── QUOTE SECTION ── */
+    #quote {
+      height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 0 72px;
+      position: relative; overflow: hidden;
+      background: var(--deep);
+    }
+    #quote::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 50% at 50% 50%, rgba(26,58,92,.18) 0%, transparent 70%);
+    }
+    .quote-ornament {
+      font-family: 'Playfair Display', serif;
+      font-size: 8rem; font-weight: 300;
+      color: rgba(196,204,212,.06); line-height: 1;
+      margin-bottom: -40px; position: relative; z-index: 1;
+    }
+    .quote-text {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 5vw, 4.5rem);
+      font-weight: 300; font-style: italic;
+      line-height: 1.2; color: var(--white);
+      max-width: 860px; position: relative; z-index: 1;
+    }
+    .quote-text em { font-style: normal; color: var(--silver); }
+    .quote-rule {
+      width: 1px; height: 64px;
+      background: linear-gradient(to bottom, var(--steel), transparent);
+      margin: 48px auto 32px;
+    }
+    .quote-attr {
+      font-size: .6rem; letter-spacing: .38em;
+      text-transform: uppercase; color: var(--steel);
+    }
+
+    /* ── TECNOLOGÍA ── */
+    #tecnologia {
+      height: 100vh; display: flex; align-items: center;
+      padding: 0 72px; background: var(--panel);
+      border-top: 1px solid var(--border);
+    }
+    .tech-layout {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 100px; align-items: center; width: 100%;
+    }
+    .tech-left .section-label { font-size: .6rem; letter-spacing: .38em; text-transform: uppercase; color: var(--steel); margin-bottom: 20px; }
+    .tech-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 4.5vw, 4rem);
+      font-weight: 300; line-height: 1.1; color: var(--white);
+      margin-bottom: 32px;
+    }
+    .tech-title em { font-style: italic; color: var(--silver); }
+    .tech-body { font-size: .83rem; color: var(--steel); line-height: 1.95; margin-bottom: 44px; }
+    .tech-specs { display: flex; flex-direction: column; gap: 0; }
+    .ts-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 18px 0; border-bottom: 1px solid var(--border);
+    }
+    .ts-key { font-size: .62rem; letter-spacing: .22em; text-transform: uppercase; color: var(--steel); }
+    .ts-bar-wrap { flex: 1; margin: 0 24px; height: 1px; background: var(--border2); position: relative; }
+    .ts-bar { height: 1px; background: linear-gradient(to right, var(--steel), var(--chrome)); transition: width 1.2s ease; }
+    .ts-val { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 300; color: var(--chrome); white-space: nowrap; }
+
+    /* ── HERENCIA ── */
+    #herencia {
+      height: auto; min-height: 100vh;
+      padding: 120px 72px; border-top: 1px solid var(--border);
+      scroll-snap-align: start;
+    }
+    .her-header { margin-bottom: 80px; }
+    .her-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      font-weight: 300; color: var(--white);
+    }
+    .her-title em { font-style: italic; color: var(--silver); }
+    .her-timeline { display: grid; grid-template-columns: repeat(4,1fr); gap: 2px; }
+    .her-card { background: var(--panel); padding: 44px 36px; position: relative; overflow: hidden; }
+    .her-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(to right, var(--blue-lt), transparent);
+      opacity: 0; transition: opacity .4s;
+    }
+    .her-card:hover::before { opacity: 1; }
+    .her-year {
+      font-family: 'Playfair Display', serif;
+      font-size: 4rem; font-weight: 700;
+      color: rgba(196,204,212,.05); line-height: 1; margin-bottom: 24px;
+    }
+    .her-name { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 300; color: var(--chrome); margin-bottom: 14px; }
+    .her-text { font-size: .76rem; color: var(--steel); line-height: 1.88; }
+
+    /* ── CTA FINAL ── */
+    #finale {
+      height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 0 72px;
+      position: relative; overflow: hidden;
+      background: var(--deep); border-top: 1px solid var(--border);
+    }
+    #finale::before {
+      content: 'NIKE';
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      font-family: 'Playfair Display', serif; font-weight: 700; font-style: italic;
+      font-size: 30vw; color: rgba(255,255,255,.015);
+      pointer-events: none; white-space: nowrap; letter-spacing: -.03em;
+    }
+    .finale-label { font-size: .6rem; letter-spacing: .38em; text-transform: uppercase; color: var(--steel); margin-bottom: 28px; }
+    .finale-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 7vw, 6rem);
+      font-weight: 300; line-height: 1.05; color: var(--white);
+      max-width: 800px; margin-bottom: 20px;
+    }
+    .finale-title em { font-style: italic; color: var(--silver); }
+    .finale-sub { font-size: .8rem; color: var(--steel); letter-spacing: .12em; margin-bottom: 56px; }
+    .finale-rule { width: 1px; height: 60px; background: linear-gradient(to bottom, transparent, var(--steel), transparent); margin: 0 auto 56px; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 48px 72px;
+      display: grid; grid-template-columns: 1fr auto 1fr;
+      align-items: center; gap: 40px;
+    }
+    .f-logo { font-family: 'Raleway', sans-serif; font-weight: 100; font-size: 1rem; letter-spacing: .55em; text-transform: uppercase; color: var(--steel); }
+    .f-links { display: flex; gap: 36px; list-style: none; justify-content: center; }
+    .f-links a { font-size: .58rem; letter-spacing: .22em; text-transform: uppercase; color: rgba(138,154,170,.5); text-decoration: none; transition: color .3s; }
+    .f-links a:hover { color: var(--chrome); }
+    .f-copy { font-size: .58rem; letter-spacing: .15em; color: rgba(138,154,170,.3); text-align: right; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp { from { opacity:0; transform:translateY(32px); } to { opacity:1; transform:translateY(0); } }
+    .reveal { opacity:0; transform:translateY(28px); transition: opacity .9s ease, transform .9s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .reveal-left { opacity:0; transform:translateX(-28px); transition: opacity .9s ease, transform .9s ease; }
+    .reveal-left.visible { opacity:1; transform:translateX(0); }
+    .reveal-right { opacity:0; transform:translateX(28px); transition: opacity .9s ease, transform .9s ease; }
+    .reveal-right.visible { opacity:1; transform:translateX(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+      nav { padding: 24px 28px; }
+      .nav-links { display: none; }
+      #hero, .full-section, #coleccion, #tecnologia, #herencia, #finale, #quote { padding-left: 28px; padding-right: 28px; }
+      .modelo-content { grid-template-columns: 1fr; gap: 48px; }
+      .spec-strip { border-left: none; padding-left: 0; border-top: 1px solid var(--border2); padding-top: 32px; }
+      .col-grid { grid-template-columns: 1fr; }
+      .tech-layout { grid-template-columns: 1fr; gap: 52px; }
+      .her-timeline { grid-template-columns: 1fr 1fr; }
+      footer { grid-template-columns: 1fr; text-align: center; }
+      .f-copy { text-align: center; }
+    }
+  </style>
+
+</head>
+<body>
+
+  <div id="cur"></div>
+  <div id="cur-ring"></div>
+
+  <!-- NAV -->
+
+  <nav>
+    <a href="#hero" class="nav-brand">Nike</a>
+    <ul class="nav-links">
+      <li><a href="#modelo">Colección</a></li>
+      <li><a href="#tecnologia">Tecnología</a></li>
+      <li><a href="#herencia">Herencia</a></li>
+      <li><a href="#finale">Contacto</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="#finale" class="nav-btn">Configurar</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+
+  <section id="hero" class="snap">
+    <div class="hero-grid-bg"></div>
+    <div class="hero-giant">N</div>
+    <div class="hero-line"></div>
+    <p class="hero-eyebrow">Colección Atelier · 2026</p>
+    <h1 class="hero-title">
+      El arte<br>de <em>superar</em><br>lo imposible.
+    </h1>
+    <p class="hero-desc">Cada par diseñado con la misma obsesión que un hypercar. Sin compromiso. Sin límite.</p>
+    <div class="hero-ctas">
+      <a href="#modelo" class="cta-main">Descubrir</a>
+      <a href="#coleccion" class="cta-sec">Ver colección</a>
+    </div>
+    <div class="scroll-hint">Desplazar para explorar</div>
+  </section>
+
+  <!-- BAND -->
+
+  <div class="band">
+    <div class="band-inner">
+      <span class="band-item">Air Max <b>·</b></span>
+      <span class="band-item">Carbon Plate <b>·</b></span>
+      <span class="band-item">Vaporfly <b>·</b></span>
+      <span class="band-item">React Foam <b>·</b></span>
+      <span class="band-item">Just Do It <b>·</b></span>
+      <span class="band-item">Precision Engineering <b>·</b></span>
+      <span class="band-item">Air Max <b>·</b></span>
+      <span class="band-item">Carbon Plate <b>·</b></span>
+      <span class="band-item">Vaporfly <b>·</b></span>
+      <span class="band-item">React Foam <b>·</b></span>
+      <span class="band-item">Just Do It <b>·</b></span>
+      <span class="band-item">Precision Engineering <b>·</b></span>
+    </div>
+  </div>
+
+  <!-- MODELO HERO -->
+
+  <section id="modelo" class="full-section snap">
+    <div class="modelo-bg"></div>
+    <div class="modelo-content">
+      <div class="reveal-left">
+        <p class="modelo-label">Modelo insignia · 2026</p>
+        <h2 class="modelo-name">
+          Alphafly<br><em>Atelier</em>
+        </h2>
+        <p class="modelo-sub">La zapatilla más rápida jamás creada. Placa de carbono T700, espuma ZoomX de triple capa y geometría optimizada con inteligencia artificial. Para los que no conocen el límite.</p>
+        <div class="modelo-action">
+          <a href="#coleccion" class="cta-main">Explorar modelo</a>
+        </div>
+      </div>
+      <div class="spec-strip reveal-right">
+        <div class="spec-row">
+          <span class="spec-key">Peso</span>
+          <span class="spec-val">149<sup>g</sup></span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Retorno energía</span>
+          <span class="spec-val">87<sup>%</sup></span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Placa</span>
+          <span class="spec-val">T700<sup>CF</sup></span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Drop</span>
+          <span class="spec-val">8<sup>mm</sup></span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Unidades</span>
+          <span class="spec-val">500<sup>pares</sup></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COLECCIÓN -->
+
+  <section id="coleccion" class="snap">
+    <div class="col-header reveal">
+      <div>
+        <p style="font-size:.6rem;letter-spacing:.38em;text-transform:uppercase;color:var(--steel);margin-bottom:16px;">Colección completa</p>
+        <h2 style="font-family:'Playfair Display',serif;font-size:clamp(2.2rem,4vw,3.5rem);font-weight:300;color:var(--white);">Cada modelo,<br><em style="font-style:italic;color:var(--silver);">una declaración</em></h2>
+      </div>
+      <a href="#finale" class="cta-sec">Ver todos</a>
+    </div>
+    <div class="col-grid">
+      <div class="col-card reveal">
+        <div class="col-visual"><div class="col-glyph">α</div><span class="col-badge">Nuevo · 2026</span></div>
+        <div class="col-info">
+          <div class="col-name">Alphafly Atelier</div>
+          <div class="col-cat">Racing · Edición limitada · 500 pares</div>
+          <div class="col-price">€ 980</div>
+        </div>
+      </div>
+      <div class="col-card reveal">
+        <div class="col-visual"><div class="col-glyph">V</div><span class="col-badge">Exclusivo</span></div>
+        <div class="col-info">
+          <div class="col-name">Vaporfly Noir</div>
+          <div class="col-cat">Elite Racing · Carbon · 750 pares</div>
+          <div class="col-price">€ 680</div>
+        </div>
+      </div>
+      <div class="col-card reveal">
+        <div class="col-visual"><div class="col-glyph">∞</div><span class="col-badge">Signature</span></div>
+        <div class="col-info">
+          <div class="col-name">Air Max Maison</div>
+          <div class="col-cat">Lifestyle · Handcrafted · 1200 pares</div>
+          <div class="col-price">€ 520</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUOTE -->
+
+  <section id="quote" class="snap">
+    <div class="quote-ornament reveal">"</div>
+    <p class="quote-text reveal">
+      La velocidad no es una meta.<br>
+      Es el <em>lenguaje</em> de los que<br>no conocen la rendición.
+    </p>
+    <div class="quote-rule reveal"></div>
+    <p class="quote-attr reveal">— Filosofía Nike Atelier, 2026</p>
+  </section>
+
+  <!-- TECNOLOGÍA -->
+
+  <section id="tecnologia" class="snap">
+    <div class="tech-layout">
+      <div class="reveal-left">
+        <p class="section-label">Ingeniería de precisión</p>
+        <h2 class="tech-title">Tecnología que<br><em>redefine</em> el posible</h2>
+        <p class="tech-body">Cada componente nace de años de investigación biomecánica y materiales aeroespaciales. No fabricamos zapatillas. Fabricamos instrumentos de rendimiento.</p>
+        <a href="#coleccion" class="cta-main">Ver colección</a>
+      </div>
+      <div class="tech-specs reveal-right">
+        <div class="ts-row">
+          <span class="ts-key">Peso</span>
+          <div class="ts-bar-wrap"><div class="ts-bar" style="width:92%"></div></div>
+          <span class="ts-val">149 g</span>
+        </div>
+        <div class="ts-row">
+          <span class="ts-key">Retorno energía</span>
+          <div class="ts-bar-wrap"><div class="ts-bar" style="width:87%"></div></div>
+          <span class="ts-val">87 %</span>
+        </div>
+        <div class="ts-row">
+          <span class="ts-key">Rigidez placa</span>
+          <div class="ts-bar-wrap"><div class="ts-bar" style="width:96%"></div></div>
+          <span class="ts-val">T700 CF</span>
+        </div>
+        <div class="ts-row">
+          <span class="ts-key">Amortiguación</span>
+          <div class="ts-bar-wrap"><div class="ts-bar" style="width:78%"></div></div>
+          <span class="ts-val">3 capas</span>
+        </div>
+        <div class="ts-row">
+          <span class="ts-key">Respuesta</span>
+          <div class="ts-bar-wrap"><div class="ts-bar" style="width:100%"></div></div>
+          <span class="ts-val">0.08 s</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HERENCIA -->
+
+  <section id="herencia" class="snap">
+    <div class="her-header reveal">
+      <p style="font-size:.6rem;letter-spacing:.38em;text-transform:uppercase;color:var(--steel);margin-bottom:20px;">Legado</p>
+      <h2 class="her-title">Cinco décadas de <em>obsesión</em></h2>
+    </div>
+    <div class="her-timeline">
+      <div class="her-card reveal">
+        <div class="her-year">1972</div>
+        <div class="her-name">El origen</div>
+        <p class="her-text">Bill Bowerman vierte caucho en una gofrera. Nace la suela Waffle y con ella, una filosofía: la innovación no tiene límite.</p>
+      </div>
+      <div class="her-card reveal">
+        <div class="her-year">1987</div>
+        <div class="her-name">Air visible</div>
+        <p class="her-text">La tecnología Air se hace visible por primera vez. La transparencia como declaración de intenciones ante el mundo.</p>
+      </div>
+      <div class="her-card reveal">
+        <div class="her-year">2017</div>
+        <div class="her-name">Breaking2</div>
+        <p class="her-text">El intento más ambicioso de la historia del atletismo. Ingeniería y biología al servicio del límite humano absoluto.</p>
+      </div>
+      <div class="her-card reveal">
+        <div class="her-year">2026</div>
+        <div class="her-name">Atelier</div>
+        <p class="her-text">Donde el rendimiento de élite y el refinamiento extremo convergen. Para los que exigen lo mejor en cada detalle.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINALE -->
+
+  <section id="finale" class="snap">
+    <div style="position:relative;z-index:1;">
+      <p class="finale-label reveal">Únete</p>
+      <h2 class="finale-title reveal">Hecho para quienes<br>solo aceptan <em>lo excepcional</em></h2>
+      <p class="finale-sub reveal">Acceso prioritario · Colección Atelier 2026</p>
+      <div class="finale-rule reveal"></div>
+      <div class="reveal">
+        <a href="#coleccion" class="cta-main">Configurar tu par</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+
+  <footer>
+    <span class="f-logo">Nike</span>
+    <ul class="f-links">
+      <li><a href="#">Colección</a></li>
+      <li><a href="#">Tecnología</a></li>
+      <li><a href="#">Herencia</a></li>
+      <li><a href="#">Prensa</a></li>
+    </ul>
+    <span class="f-copy">© 2026 Nike, Inc. Todos los derechos reservados.</span>
+  </footer>
+
+  <script>
+    // Cursor
+    const cur = document.getElementById('cur');
+    const ring = document.getElementById('cur-ring');
+    document.addEventListener('mousemove', e => {
+      cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px';
+      setTimeout(() => { ring.style.left = e.clientX + 'px'; ring.style.top = e.clientY + 'px'; }, 90);
+    });
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => { ring.style.transform = 'translate(-50%,-50%) scale(1.6)'; ring.style.borderColor = 'rgba(196,204,212,.6)'; });
+      el.addEventListener('mouseleave', () => { ring.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.borderColor = 'rgba(196,204,212,.35)'; });
+    });
+
+    // Scroll reveal
+    const allReveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 100);
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    allReveals.forEach(el => obs.observe(el));
+  </script>
+
+</body>
+</html>
